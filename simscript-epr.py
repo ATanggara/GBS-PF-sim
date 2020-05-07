@@ -56,7 +56,7 @@ print("P(0,0) = "+str(1/np.sqrt(det_s_Q)))
 m = np.zeros(4)
 r = 0.25
 ndata = int(sys.argv[1])
-print(ndata)
+print("Creating "+str(ndata)+" homodyne data...")
 
 qp = []
 for i in range(ndata):
@@ -65,6 +65,7 @@ for i in range(ndata):
 qp = np.array(qp)
 
 #calculate prob
+print("Calculating probability using PF...")
 ns = np.array([1,1])
 pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns, prtf=int(ndata/10))
 
