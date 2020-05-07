@@ -80,5 +80,5 @@ pattern = "(1,1)"
 ress = [pfss, pfprods, pfsums, pfavgs, errs]
 resn = ["pfss", "pfprods", "pfsums", "pfavgs", "errs"]
 for i in range(len(ress)):
-    np.save(reldir+resn[i]+pattern+","+str(ndata)+" - "+str(time), ress[i])
+    np.save(reldir+resn[i]+pattern+"_"+str(ndata)+" - "+str(time), ress[i])
 
