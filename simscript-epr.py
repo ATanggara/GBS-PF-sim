@@ -1,7 +1,4 @@
 import numpy as np
-from matplotlib import pyplot as plt
-from itertools import product
-from scipy import special
 import hafnian
 import datetime
 import sys
