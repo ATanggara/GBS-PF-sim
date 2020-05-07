@@ -4,6 +4,7 @@ from itertools import product
 from scipy import special
 import hafnian
 import datetime
+import sys
 
 from GBSPF.opers import *
 from GBSPF.PF import *
@@ -54,7 +55,8 @@ print("P(0,0) = "+str(1/np.sqrt(det_s_Q)))
 #create data - EPR
 m = np.zeros(4)
 r = 0.25
-ndata = 100000
+ndata = int(sys.argv[1])
+print(ndata)
 
 qp = []
 for i in range(ndata):
@@ -64,7 +66,7 @@ qp = np.array(qp)
 
 #calculate prob
 ns = np.array([1,1])
-pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns, prtf=5000)
+pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns, prtf=int(ndata/10))
 
 # save result
 date = str(datetime.date.today())
