@@ -20,6 +20,7 @@ lress = []
 for i in range(len(resn)):
     lress.append(np.load(np.load(reldir+resn[i]+pattern+","+str(ndata)+" - "+str(time)+".npy")))
 
+
 pfssl, pfprodsl, pfsumsl, pfavgsl, errsl = lress[0], lress[1], lress[2], lress[3], lress[4]
 
 
