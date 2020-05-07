@@ -66,7 +66,7 @@ qp = np.array(qp)
 ns = np.array([1,1])
 pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns, prtf=5000)
 
-#save result
+# save result
 date = str(datetime.date.today())
 hr = str(datetime.datetime.now().hour)
 mint = str(datetime.datetime.now().minute)
