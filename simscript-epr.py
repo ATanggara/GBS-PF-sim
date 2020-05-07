@@ -64,7 +64,7 @@ qp = np.array(qp)
 #calculate prob
 print("Calculating probability using PF...")
 ns = np.array([1,1])
-pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns, prtf=int(ndata/10))
+pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns)
 
 # save result
 date = str(datetime.date.today())
