@@ -6,6 +6,12 @@ import sys
 from GBSPF.opers import *
 from GBSPF.PF import *
 
+"""
+To run: $ python simscript-epr.py x y
+    - x is number of data
+    - y is pattern '00' or '11'
+"""
+
 
 #### Define GBS output pattern and interferometer params
 
@@ -43,7 +49,8 @@ Pn_haf = (1/np.sqrt(det_s_Q)) * haf**2
 print("\nP(1,1) = "+str(Pn_haf))
 
 # probability for n = (0,0), assuming that the Haf(B_s) = 1
-print("P(0,0) = "+str(1/np.sqrt(det_s_Q)))
+P0_haf = 1/np.sqrt(det_s_Q)
+print("\nP(0,0) = "+str(P0_haf))
 
 
 
@@ -53,7 +60,7 @@ print("P(0,0) = "+str(1/np.sqrt(det_s_Q)))
 m = np.zeros(4)
 r = 0.25
 ndata = int(sys.argv[1])
-print("Creating "+str(ndata)+" homodyne data...")
+print("\n========================\nCreating "+str(ndata)+" homodyne data...\n")
 
 qp = []
 for i in range(ndata):
@@ -63,7 +70,7 @@ qp = np.array(qp)
 
 #calculate prob
 print("Calculating probability using PF...")
-ns = np.array([1,1])
+ns = np.array([int(sys.argv[2][0]), int(sys.argv[2][1])])
 pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns)
 
 # save result
@@ -72,7 +79,7 @@ hr = str(datetime.datetime.now().hour)
 mint = str(datetime.datetime.now().minute)
 time = date+"-"+hr+""+mint #timestamp file
 reldir = "EPR_res/" #relative save directory
-pattern = "(1,1)"
+pattern = "("+str(ns[0])+","+str(ns[1])+")"
 
 ress = [pfss, pfprods, pfsums, pfavgs, errs]
 resn = ["pfss", "pfprods", "pfsums", "pfavgs", "errs"]
