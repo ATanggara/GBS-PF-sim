@@ -73,12 +73,12 @@ pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns, prtf=int(ndata/10)
 date = str(datetime.date.today())
 hr = str(datetime.datetime.now().hour)
 mint = str(datetime.datetime.now().minute)
-time = date+"-"+hr+":"+mint #timestamp file
+time = date+"-"+hr+""+mint #timestamp file
 reldir = "EPR_res/" #relative save directory
 pattern = "(1,1)"
 
 ress = [pfss, pfprods, pfsums, pfavgs, errs]
 resn = ["pfss", "pfprods", "pfsums", "pfavgs", "errs"]
 for i in range(len(ress)):
-    np.save(reldir+resn[i]+pattern+" - "+str(time), ress[i])
+    np.save(reldir+resn[i]+pattern+","+str(ndata)+" - "+str(time), ress[i])
 
