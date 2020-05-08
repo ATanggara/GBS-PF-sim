@@ -67,7 +67,7 @@ def pf_stdev(N, n, Pfs, PfAvgs):
     return np.sqrt((1/(N**2-N)) * summ)
 
 
-def pf_avg_prod_sum(qp, ns, prtf=1000):
+def pf_avg_prod_sum(qp, ns):
     """
     - qp is complete homodyne data for both quadratures of all modes
         qp dimension is (N,2m) for number of data N and m modes
@@ -88,7 +88,7 @@ def pf_avg_prod_sum(qp, ns, prtf=1000):
     pfavgs = []
     errs = [] 
     for j in range(qp.shape[0]): #loop over homodyne data
-        if (prtf!=0) and (j%prtf==0):
+        if (j%int((qp.shape[0]/10)) == 0):
             print(str(j)+" homodyne data")
         ## calculate pattern function
         pfprod = 1
