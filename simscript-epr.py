@@ -7,14 +7,16 @@ from GBSPF.opers import *
 from GBSPF.PF import *
 
 """
-To run: $ python simscript-epr.py x y
+To run: $ python simscript-epr.py x y r
     - x is number of data
     - y is pattern '00' or '11'
+    - r is squeezing param grater than or equal to 0
 """
 
 
 #### Define GBS output pattern and interferometer params
 
+r = sys.argv[3]
 ns = np.array([1,1])
 rs = np.array([-0.25,0.25]) #squeezing param
 t = 0.5 #bs transmissivity
