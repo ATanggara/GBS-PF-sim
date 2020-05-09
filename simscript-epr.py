@@ -17,8 +17,8 @@ To run: $ python simscript-epr.py x y r
 #### Define GBS output pattern and interferometer params
 
 r = float(sys.argv[3])
-ns = np.array([1,1])
-rs = np.array([-0.25,0.25]) #squeezing param
+ns = np.array([int(sys.argv[2][0]), int(sys.argv[2][1])])
+rs = np.array([-r,r]) #squeezing param
 t = 0.5 #bs transmissivity
 
 
@@ -60,7 +60,6 @@ print("\nP(0,0) = "+str(P0_haf))
 
 #create data - EPR
 m = np.zeros(4)
-r = 0.25
 ndata = int(sys.argv[1])
 print("\n========================\nCreating "+str(ndata)+" homodyne data...\n")
 
@@ -72,7 +71,6 @@ qp = np.array(qp)
 
 #calculate prob
 print("Calculating probability using PF...")
-ns = np.array([int(sys.argv[2][0]), int(sys.argv[2][1])])
 pfss, pfprods, pfsums, pfavgs, errs = pf_avg_prod_sum(qp, ns)
 
 # save result
