@@ -16,7 +16,7 @@ To run: $ python simscript-epr.py x y r
 
 #### Define GBS output pattern and interferometer params
 
-r = sys.argv[3]
+r = float(sys.argv[3])
 ns = np.array([1,1])
 rs = np.array([-0.25,0.25]) #squeezing param
 t = 0.5 #bs transmissivity
