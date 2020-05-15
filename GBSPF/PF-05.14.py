@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Pattern Function
+Created on Fri May 15 00:07:31 2020
 
 @author: andrewtanggara
 """
@@ -70,22 +72,21 @@ def pf_stdev(N, n, Pfs, PfAvgs):
     summ = 0
     for i in range(N):
         summ = summ + (Pfs[i] - PfAvgs[i])**2
-    return np.sqrt((1/(N**2-N)) * summ)
-
+    return np.sqrt((1/(N**2-N)) * summ) 
 
 def pf_avg_prod_sum(qp, ns):
     """
     - qp is complete homodyne data for both quadratures of all modes
         qp dimension is (N,2m) for number of data N and m modes
     - ns is output pattern
+    - prtf print everytime n hom data is processed
     
     returned values:
     - pfss: size=(N,m), pattern function for each mode of each hom data
-    - pfprods: size=(N,1), product of PFs for each mode for each hom data, j-th element is PF for the j-th data
+    - pfprods: size=(N,1), product of PFs for each mode for each hom data, j-th element is PF for the $
     - pfsums: size=(N,1), j-th element sum until j-th data
     - pfavgs: size=(N,1), j-th element is average of PFs until j-th data
-    - errs: size=(N,1), j-th element is stdev until j-th data
-    - errsums: size(N,1), j-th element is sum for errs calculation
+    - stdevs: size=(N,1), j-th element is stdev until j-th data
     """
     m = ns.shape[0]
     pfss = [] 
@@ -93,7 +94,6 @@ def pf_avg_prod_sum(qp, ns):
     pfsums = [] 
     pfavgs = []
     errs = []
-    errsums = []
     for j in range(qp.shape[0]): #loop over homodyne data
         if (j%int((qp.shape[0]/10)) == 0):
             print(str(j)+" homodyne data")
@@ -108,22 +108,19 @@ def pf_avg_prod_sum(qp, ns):
         pfprods.append(pfprod)
         ## calculate sum
         if len(pfsums) == 0:
-            pfsums.append(pfprods[j])
+           pfsums.append(pfprods[j])
         else:
             pfsums.append(pfsums[-1] + pfprods[j])
         ## calculate average
         pfavgs.append(pfsums[j]/(j+1))
         ## calculate error
+        sqsum = 0
+        for l in range(j):
+            sqsum = sqsum + (pfprods[l] - pfavgs[j])**2
         if j==0:
-            errsums.append((pfprods[0] - pfavgs[0])**2)
-            errs.append( np.sqrt(errsums[j]) )
+            errs.append( np.sqrt(sqsum) )
         else:
-            errsums.append(errsums[-1] + pfprods[-1]**2 - 
-                           (j+1)*pfavgs[j]**2 + j*pfavgs[j-1]**2)
-            errs.append( np.sqrt( errsums[j]/((j+1)**2-(j+1)) ) )
-    return (np.array(pfss), np.array(pfprods), 
-            np.array(pfsums), np.array(pfavgs), 
-            np.array(errs), np.array(errsums))
-    
-    
+            errs.append( np.sqrt( sqsum/((j+1)**2-(j+1)) ) )
+    return np.array(pfss), np.array(pfprods), np.array(pfsums), np.array(pfavgs), np.array(errs)
+
 

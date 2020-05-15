@@ -1,4 +1,10 @@
+"""
+CV Gaussian Operations
+
+@author: andrewtanggara
+"""
 import numpy as np
+import hafnian
 
 def squeezer(r):
     return np.array([[np.exp(-r), 0], [0, np.exp(r)]])
@@ -72,24 +78,65 @@ def sq_haf(rs):
     return np.block([[s,c],
                     [c,s]])
 
-def beamsplitter_haf(st, t, fm):
+def inter_haf(st, D):
     """
-    t in [0,1]
-    fm is the first mode being split
+    D is interferometer
+    st is covariance matrix
+    """
+    Dl = dirsum(D,D)
+    Dr = dirsum(D.T,D.T)
+    return (1/2)*Dl@st@Dr
+
+def BS_bos(m, t, fm):
+    """
+    Bosonic operator beamsplitter
+    - t transmissivity
+    - m total modes of system (2 or more)
+    - fm is the first mode being split
         e.g: if fm=2, then beamsplitter 
         operates on mode 2 and 3
-    st is covariance matrix
     """
     D = np.array([[np.sqrt(t), -np.sqrt(1-t)],
                   [np.sqrt(1-t), np.sqrt(t)]])
-    if (np.shape(st)[1] > 2):
+    if (m > 2):
         D = dirsum(dirsum(np.eye((fm-1)), D), 
-                   np.eye(np.shape(st)[1] - (fm+1)))
-    return D.T@st@D
+                   np.eye(m - (fm+1)))
+    return D
 
 def submtr(B,n):
     nidx = np.argwhere(n).flatten()
     return B[np.ix_(nidx, nidx)]
+
+def prob_haf(rs, ns, bs_arr, t):
+    """
+    compute output pattern probability using hafnian
+    - rs: size (1,m) squeezing parameters
+    - ns: size (1,m) output pattern
+    - bs_arr: beamsplitter arrangement ([1,3,2] means beamsplit mode 1&2, 3&4, then 2&3)
+    - t: transmissivity of beamsplitters
+    """
+    m = ns.shape[0]
+    #define interferometer
+    D = BS_bos(m,t,1) 
+    D = np.eye(m)
+    for i in range(bs_arr.shape[0]):
+        D = BS_bos(m, t, bs_arr[i]) @ D
+
+    #calculate cov matrix
+    s = sq_haf(rs)@sq_haf(rs).T
+    s = inter_haf(s,D)
+
+    #calculate matrix B
+    B = np.diag(np.tanh(rs))
+    B = D@B@D.T
+    B = submtr(B, ns)
+
+    s_Q = s + np.eye(s.shape[0])*(1/2)
+    det_s_Q = np.linalg.det(s_Q)
+    haf = hafnian.hafnian(B)
+    Pn = (1/np.sqrt(det_s_Q)) * haf**2
+
+    return Pn
 
 
 #### EPR cov mtr
