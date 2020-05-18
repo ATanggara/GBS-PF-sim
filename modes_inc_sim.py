@@ -17,7 +17,7 @@ ns = ""
 ndata = sys.argv[1]
 
 for i in range(2,max_modes+1,2):
-    print("--"+str(i))
+    print("\n---------- "+str(i)+" modes ----------")
     ns = ns + "00"
     print(ns)
     bs_arr = ""

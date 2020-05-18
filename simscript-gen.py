@@ -1,9 +1,10 @@
 """
-To run: $ python simscript-gen.py x y r b
+To run: $ python simscript-gen.py x y r b s
     - x is number of data
     - y is output pattern '0011' or '11' or '1001', etc.
     - r is squeezing param grater than or equal to 0
     - b is beamsplitter arrangement 132 means means mix mode 1&2, 3&4, then 2&3
+    - s is stamp
 """
 
 import numpy as np
@@ -44,19 +45,10 @@ bs_arr = np.array(bs_arr)
 #### CALCULATE HAFNIAN PROB
 
 Pn_haf = prob_haf(rs, ns, bs_arr, t)
-print("Probability form hafnian: "+str(Pn_haf))
+print("Probability from hafnian: "+str(Pn_haf))
+
 
 #### CALCULATE PF PROB
-
-#create data
-#m = np.zeros(ns.shape[0])
-#ndata = int(sys.argv[1])
-#print("\n========================\nCreating "+str(ndata)+" homodyne data...\n")
-#qp = []
-#for i in range(ndata):
-#    s = cov_randphase_epr(r)
-#    qp.append(np.random.multivariate_normal(m, s))
-#qp = np.array(qp)
 
 #compute first and second moments
 mu = np.zeros(ns.shape[0]*2)
@@ -76,13 +68,13 @@ for i in range(ndata):
     qp.append(np.random.multivariate_normal(mu, s_rand*0.5))
 qp = np.array(qp)
 
-
 #calculate prob
 print("Calculating probability using PF...")
 pfss, pfprods, pfsums, pfavgs, errs, errsums = pf_avg_prod_sum(qp, ns)
 
 
 #### save result
+
 date = str(datetime.date.today())
 hr = str(datetime.datetime.now().hour)
 mint = str(datetime.datetime.now().minute)
