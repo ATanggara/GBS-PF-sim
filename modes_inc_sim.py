@@ -19,7 +19,7 @@ ndata = sys.argv[1]
 for i in range(2,max_modes+1,2):
     print("\n---------- "+str(i)+" modes ----------")
     ns = ns + "00"
-    print(ns)
+    print("Output: "+ns)
     bs_arr = ""
     for j in range(1,i):
         bs_arrj = ""
@@ -30,9 +30,8 @@ for i in range(2,max_modes+1,2):
             for k in range(2,i-1,2):
                 bs_arrj = bs_arrj + str(k)
         bs_arr = bs_arr + bs_arrj
-#        print(bs_arrj)
-    print(bs_arr)
-    print("running command: "+"python simscript-gen.py "+ndata+" "+str(ns)+" "+r+" "+bs_arr)
+    print("Beamsplitter arrangement: "+bs_arr)
+    print("Running command: "+"python simscript-gen.py "+ndata+" "+str(ns)+" "+r+" "+bs_arr)
     os.system(s+ndata+" "+str(ns)+" "+r+" "+bs_arr)
 
 
