@@ -33,7 +33,7 @@ for i in range(2,max_modes+1,2):
 #        print(bs_arrj)
     print(bs_arr)
     print("running command: "+"python simscript-gen.py "+ndata+" "+str(ns)+" "+r+" "+bs_arr)
-    os.system("python simscript-gen.py "+ndata+" "+str(ns)+" "+r+" "+bs_arr)
+    os.system(s+ndata+" "+str(ns)+" "+r+" "+bs_arr)
 
 
 
