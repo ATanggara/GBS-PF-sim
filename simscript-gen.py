@@ -1,5 +1,5 @@
 """
-To run: $ python simscript-epr.py x y r b
+To run: $ python simscript-gen.py x y r b
     - x is number of data
     - y is output pattern '0011' or '11' or '1001', etc.
     - r is squeezing param grater than or equal to 0
