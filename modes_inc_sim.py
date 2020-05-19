@@ -1,7 +1,13 @@
 """
-Created on Mon May 18 11:11:19 2020
+This will run simscript-gen.py one or more times according to maxmodes
+    modes will be incremented by 2 starting from 2 modes.
 
-python modes_inc_sim.py ndata maxmodes
+to run this:
+    $ python modes_inc_sim.py ndata maxmodes s
+
+- ndata: numebr of data per simulation
+- maxmodes: maximum number of modes
+- s: squeezing parameter
 
 @author: andrewtanggara
 """
@@ -12,9 +18,9 @@ import sys
 s = "python3 simscript-gen.py "
 
 max_modes = int(sys.argv[2])
-r = "0.25"
-ns = ""
+r = sys.argv[3]
 ndata = sys.argv[1]
+ns = ""
 
 for i in range(2,max_modes+1,2):
     print("\n---------- "+str(i)+" modes ----------")

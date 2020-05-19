@@ -1,10 +1,9 @@
 """
-To run: $ python simscript-gen.py x y r b s
+To run: $ python simscript-gen.py x y r b
     - x is number of data
     - y is output pattern '0011' or '11' or '1001', etc.
     - r is squeezing param grater than or equal to 0
     - b is beamsplitter arrangement 132 means means mix mode 1&2, 3&4, then 2&3
-    - s is stamp
 """
 
 import numpy as np
