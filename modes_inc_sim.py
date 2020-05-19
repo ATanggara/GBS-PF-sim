@@ -31,7 +31,7 @@ for i in range(2,max_modes+1,2):
                 bs_arrj = bs_arrj + str(k)
         bs_arr = bs_arr + bs_arrj
     print("Beamsplitter arrangement: "+bs_arr)
-    print("Running command: "+"python simscript-gen.py "+ndata+" "+str(ns)+" "+r+" "+bs_arr)
+    print("Running command: "+"python3 simscript-gen.py "+ndata+" "+str(ns)+" "+r+" "+bs_arr)
     os.system(s+ndata+" "+str(ns)+" "+r+" "+bs_arr)
 
 
