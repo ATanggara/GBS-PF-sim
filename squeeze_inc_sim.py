@@ -8,7 +8,8 @@ to run this:
 - ndata: numebr of data per simulation
 - modes: number of modes
 - ns: output pattern
-- r_max:
+- r_max: maximum squeezing param r (in x.xx format. e.g: "4.0")
+- r_inc: increment of squeezing r starting from 0 (e.g: "0.25")
 
 @author: andrewtanggara
 """
