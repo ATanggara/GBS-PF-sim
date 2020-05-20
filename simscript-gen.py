@@ -63,7 +63,7 @@ for i in range(ndata):
     #rand phase shift
     ts = np.ones(ns.shape[0])*np.random.rand(1)
     pi = np.ones(ns.shape[0])*np.pi
-    s_rand = mphasor(np.divide(2*pi,ts)).T@s@mphasor(np.divide(2*pi,ts))
+    s_rand = mphasor(np.multiply(2*pi,ts)).T@s@mphasor(np.multiply(2*pi,ts))
     qp.append(np.random.multivariate_normal(mu, s_rand*0.5))
 qp = np.array(qp)
 
