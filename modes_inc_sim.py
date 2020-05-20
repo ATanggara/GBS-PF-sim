@@ -5,7 +5,7 @@ This will run simscript-gen.py one or more times according to maxmodes
 to run this:
     $ python modes_inc_sim.py ndata maxmodes ns r
 
-- ndata: numebr of data per simulation
+- ndata: number of data per simulation
 - maxmodes: maximum number of modes
 - ns: output pattern
 - r: squeezing parameter
@@ -15,6 +15,26 @@ to run this:
 
 import os
 import sys
+
+def sqbs_arr(m):
+    """
+    return str of Beamsplitter arrangement in "1,4,7,12,14" format
+    """
+    barr = ""
+    for j in range(1,m):
+        bs_arrj = ""
+        if j%2==1:
+            for k in range(1,m,2):
+                if j!=1 or k!=1:
+                    bs_arrj = bs_arrj + ","
+                bs_arrj = bs_arrj + str(k)
+        else:
+            for k in range(2,m-1,2):
+                if j!=1:
+                    bs_arrj = bs_arrj + ","
+                bs_arrj = bs_arrj + str(k)
+        barr = barr + bs_arrj
+    return barr
 
 s = "python3 simscript-gen.py "
 
@@ -27,16 +47,9 @@ for i in range(2,max_modes+1,2):
     print("\n---------- "+str(i)+" modes ----------")
     nsi = ns[:i]
     print("Output: "+nsi)
-    bs_arr = ""
-    for j in range(1,i):
-        bs_arrj = ""
-        if j%2==1:
-            for k in range(1,i,2):
-                bs_arrj = bs_arrj + str(k)
-        else:
-            for k in range(2,i-1,2):
-                bs_arrj = bs_arrj + str(k)
-        bs_arr = bs_arr + bs_arrj
+    
+    bs_arr = sqbs_arr(i)
+        
     print("Beamsplitter arrangement: "+bs_arr)
     com = s+ndata+" "+str(nsi)+" "+r+" "+bs_arr
     print("Running command: "+com)

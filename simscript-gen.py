@@ -3,7 +3,7 @@ To run: $ python simscript-gen.py x y r b
     - x is number of data
     - y is output pattern '0011' or '11' or '1001', etc.
     - r is squeezing param grater than or equal to 0
-    - b is beamsplitter arrangement 132 means means mix mode 1&2, 3&4, then 2&3
+    - b is beamsplitter arrangement 1,3,2 means means mix mode 1&2, 3&4, then 2&3
 """
 
 import numpy as np
@@ -35,9 +35,10 @@ rs = np.array(rs)
 t = 0.5 #bs transmissivity
 
 #beamsplitter arrangement
+bs_arr_str = str.split(sys.argv[4], sep=',')
 bs_arr = []
-for i in range(len(sys.argv[4])):
-    bs_arr.append(int(sys.argv[4][i]))
+for i in range(len(bs_arr_str)):
+    bs_arr.append(int(bs_arr_str[i]))
 bs_arr = np.array(bs_arr)
 
 
