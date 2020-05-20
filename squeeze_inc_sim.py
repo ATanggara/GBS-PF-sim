@@ -19,16 +19,20 @@ import numpy as np
 
 def sqbs_arr(m):
     """
-    return str of Beamsplitter arrangement
+    return str of Beamsplitter arrangement in "1,4,7,12,14" format
     """
     barr = ""
     for j in range(1,m):
         bs_arrj = ""
         if j%2==1:
             for k in range(1,m,2):
+                if j!=1 or k!=1:
+                    bs_arrj = bs_arrj + ","
                 bs_arrj = bs_arrj + str(k)
         else:
             for k in range(2,m-1,2):
+                if j!=1:
+                    bs_arrj = bs_arrj + ","
                 bs_arrj = bs_arrj + str(k)
         barr = barr + bs_arrj
     return barr
