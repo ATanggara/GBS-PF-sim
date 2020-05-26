@@ -1,9 +1,11 @@
 """
-To run: $ python simscript-gen.py x y r b
+To run: $ python simscript-gen.py x y r b t s
     - x is number of data
     - y is output pattern '0011' or '11' or '1001', etc.
     - r is squeezing param grater than or equal to 0
     - b is beamsplitter arrangement 1,3,2 means means mix mode 1&2, 3&4, then 2&3
+    - t is specified save timestamp. "0" to not specify
+    - s is save all if "1", if "0" only save pfavgs and errs
 """
 
 import numpy as np
@@ -75,12 +77,15 @@ pfss, pfprods, pfsums, pfavgs, errs, errsums = pf_avg_prod_sum(qp, ns)
 
 #### save result
 
-date = str(datetime.date.today())
-hr = str(datetime.datetime.now().hour)
-mint = str(datetime.datetime.now().minute)
-time = date+"-"+hr+""+mint #timestamp file
+time = sys.argv[5]
+if sys.argv[5] == "0":
+    date = str(datetime.date.today())
+    hr = str(datetime.datetime.now().hour)
+    mint = str(datetime.datetime.now().minute)
+    time = date+"-"+hr+""+mint #timestamp file
+
 reldir = "gen_res/" #relative save directory
-pattern = "("
+pattern = "(" #output pattern
 for i in range(ns.shape[0]):
     if i!=0:
         pattern = pattern + ","
@@ -89,6 +94,12 @@ pattern = pattern + ")"
 
 ress = [pfss, pfprods, pfsums, pfavgs, errs, errsums]
 resn = ["pfss", "pfprods", "pfsums", "pfavgs", "errs", "errsums"]
-for i in range(len(ress)):
-    np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+" - "+str(time), ress[i])
 
+sa = sys.argv[6]
+if sa=="1":
+    for i in range(len(ress)):
+        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+" - "+str(time), ress[i])
+else: #only save pfavgs and errs
+    sv = [3,4]
+    for i in sv:
+        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+" - "+str(time), ress[i])

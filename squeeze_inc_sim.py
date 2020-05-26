@@ -5,7 +5,7 @@ This will run simscript-gen.py one or more times according to maxmodes
 to run this:
     $ python modes_inc_sim.py ndata modes ns r_max r_inc
 
-- ndata: numebr of data per simulation
+- ndata: number of data per simulation
 - modes: number of modes
 - ns: output pattern
 - r_max: maximum squeezing param r (in x.xx format. e.g: "4.0")
@@ -17,29 +17,10 @@ to run this:
 import os
 import sys
 import numpy as np
-
-def sqbs_arr(m):
-    """
-    return str of Beamsplitter arrangement in "1,4,7,12,14" format
-    """
-    barr = ""
-    for j in range(1,m):
-        bs_arrj = ""
-        if j%2==1:
-            for k in range(1,m,2):
-                if j!=1 or k!=1:
-                    bs_arrj = bs_arrj + ","
-                bs_arrj = bs_arrj + str(k)
-        else:
-            for k in range(2,m-1,2):
-                if j!=1:
-                    bs_arrj = bs_arrj + ","
-                bs_arrj = bs_arrj + str(k)
-        barr = barr + bs_arrj
-    return barr
+from GBSPF.util import *
 
 
-s = "python3 simscript-gen.py "
+s = "python3 simscript-gen.py"
 
 modes = int(sys.argv[2])
 ns= sys.argv[3]
@@ -51,11 +32,10 @@ rinc = np.arange(0,r_max+r_inc,r_inc)
 
 for r in rinc:
     bs_arr = sqbs_arr(modes)
-    com = s+ndata+" "+str(ns)+" "+str(r)+" "+bs_arr
+    com = s+" "+ndata+" "+str(ns)+" "+str(r)+" "+bs_arr+" "+timestamp()
     print("Running command: "+com)
     os.system(com)
     
-
 
 
 
