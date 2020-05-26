@@ -25,11 +25,12 @@ def sqbs_arr(m):
 
 def timestamp():
     """
-    return timestamp string: yyyy-mm-dd-hhmm
+    return timestamp string: yyyy-mm-dd-hh-mmss
         e.g: "2020-05-20-815" or "2020-05-20-19"
     """
     date = str(datetime.date.today())
     hr = str(datetime.datetime.now().hour)
-    mint = str(datetime.datetime.now().minute)
-    time = date+"-"+hr+""+mint #timestamp file
+    minu = str(datetime.datetime.now().minute)
+    sec = str(datetime.datetime.now().second)
+    time = date+"-"+hr+"-"+minu+""+sec #timestamp file
     return time
