@@ -7,10 +7,12 @@ import numpy as np
 import hafnian
 
 def squeezer(r):
-    return np.array([[np.exp(-r), 0], [0, np.exp(r)]])
+    return np.array([[np.exp(-r), 0], 
+                      [0, np.exp(r)]])
 
 def phasor(t):
-    return np.array([[np.cos(t), np.sin(t)], [-np.sin(t), np.cos(t)]])
+    return np.array([[np.cos(t), np.sin(t)], 
+                      [-np.sin(t), np.cos(t)]])
 
 def dirsum(A,B):
     """
@@ -104,6 +106,12 @@ def BS_bos(m, t, fm):
     return D
 
 def submtr(B,n):
+    """
+    Submatrix of B based on n
+        e.g: for n = (0,1,1,0), we have submatrix:
+        [[B[1,1],B[1,2]], 
+        [B[2,1],B[2,2]]
+    """
     nidx = np.argwhere(n).flatten()
     return B[np.ix_(nidx, nidx)]
 
