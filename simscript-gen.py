@@ -1,11 +1,12 @@
 """
-To run: $ python simscript-gen.py x y r b t s
-    - x is number of data
-    - y is output pattern '0011' or '11' or '1001', etc.
+To run: $ python simscript-gen.py n_data out r b t s n
+    - n_data is number of data
+    - out is output pattern '0011' or '11' or '1001', etc.
     - r is squeezing param grater than or equal to 0
     - b is beamsplitter arrangement 1,3,2 means means mix mode 1&2, 3&4, then 2&3
     - t is specified save timestamp. "0" to not specify
     - s is save all if "1", if "0" only save pfavgs and errs
+    - n is noise amount (equal to all modes), -1 being no noise, 0 being vacuum
 """
 
 import numpy as np
@@ -22,12 +23,18 @@ from GBSPF.PF import *
 ns = []
 for i in range(len(sys.argv[2])):
     ns.append(int(sys.argv[2][i]))
-ns = np.array(ns)
+ns = np.array(ns) #output pattern
+
+m = len(sys.argv[2]) #number of modes
+
+n_bar = float(sys.argv[7]) #noise amount
+t_noi = 0.5 #transmissivity of noise beamsplitter
+
 
 #squeezing param
 r = float(sys.argv[3])
 rs = []
-for i in range(len(sys.argv[2])):
+for i in range(m):
     if (i%2)==0:
         rs.append(-r)
     else:
@@ -45,8 +52,7 @@ bs_arr = np.array(bs_arr)
 
 
 #### CALCULATE HAFNIAN PROB
-
-Pn_haf = prob_haf(rs, ns, bs_arr, t)
+Pn_haf = prob_haf(rs, ns, bs_arr, t, n_bar, t_noi)
 print("Probability from hafnian: "+str(Pn_haf))
 
 
@@ -57,7 +63,11 @@ mu = np.zeros(ns.shape[0]*2)
 s = msqueezer(rs).T@msqueezer(rs)
 for i in range(bs_arr.shape[0]):
     s = beamsplitter(s,t,bs_arr[i])
-    
+
+#put noise into cov matrix
+for i in range(m):
+    s,_ = therm_vac_noise(st=s, fm=i, n_bar=n_bar, t=t_noi)
+
 #create data
 ndata = int(sys.argv[1])
 print("\n========================\nCreating "+str(ndata)+" homodyne data...\n")
@@ -98,8 +108,8 @@ resn = ["pfss", "pfprods", "pfsums", "pfavgs", "errs", "errsums"]
 sa = sys.argv[6]
 if sa=="1":
     for i in range(len(ress)):
-        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+" - "+str(time), ress[i])
+        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+"_"+str(n_bar)+" - "+str(time), ress[i])
 else: #only save pfavgs and errs
     sv = [3,4]
     for i in sv:
-        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+" - "+str(time), ress[i])
+        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+"_"+str(n_bar)+" - "+str(time), ress[i])

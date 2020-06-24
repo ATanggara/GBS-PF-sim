@@ -35,7 +35,7 @@ for i in range(2,max_modes+1,2):
     bs_arr = sqbs_arr(i)
         
     print("Beamsplitter arrangement: "+bs_arr)
-    com = s+" "+ndata+" "+str(nsi)+" "+r+" "+bs_arr+" "+time+" "+sys.argv[5]
+    com = (s+" "+ndata+" "+str(nsi)+" "+r+" "+bs_arr+" "+time+" "+sys.argv[5]+" "+str(-1))
     print("Running command: "+com)
     os.system(com)
 

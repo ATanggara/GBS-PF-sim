@@ -3,13 +3,14 @@ This will run simscript-gen.py one or more times according to maxmodes
     modes will be incremented by 2 starting from 2 modes.
 
 to run this:
-    $ python modes_inc_sim.py ndata modes ns r_max r_inc
+    $ python modes_inc_sim.py ndata modes ns r_max r_inc s
 
 - ndata: number of data per simulation
 - modes: number of modes
 - ns: output pattern
 - r_max: maximum squeezing param r (in x.xx format. e.g: "4.0")
 - r_inc: increment of squeezing r starting from 0 (e.g: "0.25")
+- s: save all if "1", if "0" only save pfavgs and errs
 
 @author: andrewtanggara
 """
@@ -32,7 +33,8 @@ rinc = np.arange(0,r_max+r_inc,r_inc)
 
 for r in rinc:
     bs_arr = sqbs_arr(modes)
-    com = s+" "+ndata+" "+str(ns)+" "+str(r)+" "+bs_arr+" "+timestamp()
+    com = (s+" "+ndata+" "+str(ns)+" "+str(r)+" "+bs_arr+" "+
+           timestamp()+" "+str(sys.argv[6])+" "+str(-1))
     print("Running command: "+com)
     os.system(com)
     
