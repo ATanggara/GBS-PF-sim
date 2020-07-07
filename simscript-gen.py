@@ -7,6 +7,7 @@ To run: $ python simscript-gen.py n_data out r b t s n
     - t is specified save timestamp. "0" to not specify
     - s is save all if "1", if "0" only save pfavgs and errs
     - n is noise amount (equal to all modes), -1 being no noise, 0 being vacuum
+    - t_noi is transmissivity of noise BS
 """
 
 import numpy as np
@@ -28,7 +29,7 @@ ns = np.array(ns) #output pattern
 m = len(sys.argv[2]) #number of modes
 
 n_bar = float(sys.argv[7]) #noise amount
-t_noi = 0.5 #transmissivity of noise beamsplitter
+t_noi = float(sys.argv[8]) #transmissivity of noise beamsplitter
 
 
 #squeezing param
@@ -52,11 +53,12 @@ bs_arr = np.array(bs_arr)
 
 
 #### CALCULATE HAFNIAN PROB
-Pn_haf = prob_haf(rs, ns, bs_arr, t, n_bar, t_noi)
+Pn_haf = prob_haf_gen(rs, ns, bs_arr, t, n_bar, t_noi)
+
 print("Probability from hafnian: "+str(Pn_haf))
 
 
-#### CALCULATE PF PROB
+####### CALCULATE PF PROB
 
 #compute first and second moments
 mu = np.zeros(ns.shape[0]*2)
@@ -108,8 +110,11 @@ resn = ["pfss", "pfprods", "pfsums", "pfavgs", "errs", "errsums"]
 sa = sys.argv[6]
 if sa=="1":
     for i in range(len(ress)):
-        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+"_"+str(n_bar)+" - "+str(time), ress[i])
+        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+"_"+str(n_bar)+"_"+str(t_noi)+" - "+str(time), ress[i])
 else: #only save pfavgs and errs
     sv = [3,4]
     for i in sv:
-        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+"_"+str(n_bar)+" - "+str(time), ress[i])
+        np.save(reldir+resn[i]+pattern+"_"+str(ndata)+"_"+str(r)+"_"+str(n_bar)+"_"+str(t_noi)+" - "+str(time), ress[i])
+
+
+

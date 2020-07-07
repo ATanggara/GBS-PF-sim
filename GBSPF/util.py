@@ -34,3 +34,11 @@ def timestamp():
     sec = str(datetime.datetime.now().second)
     time = date+"-"+hr+"-"+minu+""+sec #timestamp file
     return time
+
+def save():
+    pass
+
+def load():
+    pass
+
+
