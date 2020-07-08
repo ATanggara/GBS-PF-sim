@@ -7,10 +7,10 @@ transmissivity t_noi of noise beamsplitter:
     for all values increment of t_inc deom 0 to 1 
 
 to run this:
-    $ python noise_inc_sim.py ndata m ns r t_inc sv
+    $ python t_vac_noise_inc_sim.py ndata m ns r t_inc sv
 
 - ndata: number of data per simulation
-- m: maximum number of modes
+- m:  number of modes
 - ns: output pattern. e.g: "000000"
 - r: input squeezing parameter
 - t_inc: increment of noise BS transmissivity from 0 to 1

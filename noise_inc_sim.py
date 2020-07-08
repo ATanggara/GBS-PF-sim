@@ -6,7 +6,7 @@ to run this:
     $ python noise_inc_sim.py ndata m ns r max_n_bar inc_n_bar sv
 
 - ndata: number of data per simulation
-- m: maximum number of modes
+- m: number of modes
 - ns: output pattern. e.g: "000000"
 - r: input squeezing parameter
 - max_n_bar: maximum noise (avg photons in the noise modes)
@@ -31,7 +31,7 @@ r = sys.argv[4]
 max_n_bar = float(sys.argv[5])
 inc_n_bar = float(sys.argv[6])
 sv = sys.argv[7]
-
+t_noi = 0.5
 
 n_bars = np.arange(0, max_n_bar+inc_n_bar, inc_n_bar) #array of noise n_bar
 nb = []
@@ -46,7 +46,7 @@ for j in range(n_bars.shape[0]):
     bs_arr = sqbs_arr(m)
     n_bar = n_bars[j]
     com = (s+" "+ndata+" "+str(ns)+" "+str(r)+" "+bs_arr+" "+
-           ts+" "+str(sv)+" "+str(n_bar))
+           ts+" "+str(sv)+" "+str(n_bar)+" "+str(t_noi))
     print("Running command: "+com)
     os.system(com)
 

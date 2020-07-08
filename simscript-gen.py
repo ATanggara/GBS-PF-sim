@@ -67,7 +67,7 @@ for i in range(bs_arr.shape[0]):
     s = beamsplitter(s,t,bs_arr[i])
 
 #put noise into cov matrix
-for i in range(m):
+for i in range(1,m+1):
     s,_ = therm_vac_noise(st=s, fm=i, n_bar=n_bar, t=t_noi)
 
 #create data
