@@ -26,6 +26,8 @@ r = sys.argv[4]
 ndata = sys.argv[1]
 ns = sys.argv[3]
 time = timestamp() #fix a timestamp for all simulations
+n_bar = -1
+t_noi = 0.5
 
 for i in range(2,max_modes+1,2):
     print("\n---------- "+str(i)+" modes ----------")
@@ -35,7 +37,8 @@ for i in range(2,max_modes+1,2):
     bs_arr = sqbs_arr(i)
         
     print("Beamsplitter arrangement: "+bs_arr)
-    com = (s+" "+ndata+" "+str(nsi)+" "+r+" "+bs_arr+" "+time+" "+sys.argv[5]+" "+str(-1))
+    com = (s+" "+ndata+" "+str(nsi)+" "+r+" "+bs_arr+" "+time+" "+sys.argv[5]+" "+str(n_bar)+
+           " "+str(t_noi))
     print("Running command: "+com)
     os.system(com)
 
