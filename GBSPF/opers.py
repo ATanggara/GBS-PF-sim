@@ -4,7 +4,6 @@ CV Gaussian Operations
 @author: andrewtanggara
 """
 import numpy as np
-import hafnian
 
 def squeezer(r):
     return np.array([[np.exp(r), 0], 

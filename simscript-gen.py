@@ -16,6 +16,7 @@ import datetime
 import sys
 
 from GBSPF.opers import *
+from GBSPF.opers_haf import prob_haf_gen
 from GBSPF.PF import *
 
 
@@ -69,6 +70,9 @@ for i in range(bs_arr.shape[0]):
 #put noise into cov matrix
 for i in range(1,m+1):
     s,_ = therm_vac_noise(st=s, fm=i, n_bar=n_bar, t=t_noi)
+np.set_printoptions(precision=3, linewidth=200)
+print("quad cov mtr:")
+print(s)
 
 #create data
 ndata = int(sys.argv[1])

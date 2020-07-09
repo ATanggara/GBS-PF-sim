@@ -1,3 +1,7 @@
+import numpy as np
+import hafnian
+from .opers import *
+
 ######## Hafnian Calculation
 
 def sq_haf(rs):
@@ -44,7 +48,7 @@ def submtr(B,n):
 
 def prob_haf(rs, ns, bs_arr, t, n_bar, t_noi):
     """
-    compute output pattern probability using hafnian
+    compute output pattern probability from GBS with input squeezed st using hafnian
     - rs: size (1,m) squeezing parameters
     - ns: size (1,m) output pattern
     - bs_arr: beamsplitter arrangement ([1,3,2] means beamsplit mode 1&2, 3&4, then 2&3)
