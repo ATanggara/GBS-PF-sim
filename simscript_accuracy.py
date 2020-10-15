@@ -28,6 +28,8 @@ r = float(sys.argv[3])
 sv = sys.argv[4]
 xi = float(sys.argv[5])
 gam = float(sys.argv[6])
+maxN = int(sys.argv[7])
+stepN = int(sys.argv[8])
 
 
 ### generate stdev coefficients & its bound
@@ -60,7 +62,7 @@ cir = (rs,bs_arr,t,n_bar,t_noi) #Homodyne GBS circuit description
 # Calculate prob from PF
 print("Calculating probabilities using PF...")
 pfsss, pfprodss, pfsumss, pfavgss, errss, errsumss = pf_avg_prod_sum_bound_error(
-        m,k,beta,vs,cir,stepN=200,maxN=20000)
+        m,k,beta,vs,cir,stepN=stepN,maxN=maxN)
 
 
 #### CALCULATE HAFNIAN PROBS for all collision free output states
