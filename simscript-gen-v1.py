@@ -33,6 +33,8 @@ n_bar = float(sys.argv[7]) #noise amount
 t_noi = float(sys.argv[8]) #transmissivity of noise beamsplitter
 xi = float(sys.argv[9])
 gam = float(sys.argv[10])
+maxN = int(sys.argv[11])
+stepN = int(sys.argv[12])
 
 
 #squeezing params
@@ -63,11 +65,12 @@ cir = (rs,bs_arr,t,n_bar,t_noi) #Homodyne GBS circuit description
 
 #calculate prob
 print("Calculating probabilities using PF...")
-pfss, pfprods, pfsums, pfavgs, errs, errsums = pf_avg_prod_sum_bound_error(
-        m,k,beta,vs,cir,stepN=500,maxN=50000)
+pfsss, pfprodss, pfsumss, pfavgss, errss, errsumss = pf_avg_prod_sum_bound_error(
+        m,k,beta,vs,cir,stepN=stepN,maxN=maxN)
 
 
 #### CALCULATE HAFNIAN PROBS for all collision free output states
+print("\n** Calculating Hafnian Probability...")
 Pn_hafs = []
 for ns in nss_mk:
     Pn_haf = prob_haf_gen(rs, ns, bs_arr, t, n_bar, t_noi)
