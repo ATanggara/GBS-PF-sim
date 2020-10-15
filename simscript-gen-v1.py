@@ -97,12 +97,12 @@ resn = ["pfsss", "pfprodss", "pfsumss", "pfavgss", "errss", "errsumss"]
 sa = sys.argv[6]
 if sa=="1":
     for i in range(len(ress)):
-        np.save(reldir+resn[i]+inputs+"_"+str(ndata)+"_"+str(r)+"_"+
+        np.save(reldir+resn[i]+inputs+"_"+str(xi)+"_"+str(gam)+"_"+str(r)+"_"+
                 str(n_bar)+"_"+str(t_noi)+" - "+str(time), ress[i])
 else: #only save pfavgs and errs
     sv = [3,4]
     for i in sv:
-        np.save(reldir+resn[i]+inputs+"_"+str(ndata)+"_"+str(r)+"_"+
+        np.save(reldir+resn[i]+inputs+"_"+str(xi)+"_"+str(gam)+"_"+str(r)+"_"+
                 str(n_bar)+"_"+str(t_noi)+" - "+str(time), ress[i])
 
 
