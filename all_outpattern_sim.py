@@ -13,7 +13,9 @@ to run this:
 - sv: save all if "1", if "0" only save pfavgs and errs
 - xi: value in (0,1) - lower-bound for PF-GBS approximation error
 - gam: value in (0,1) - upper-bound for probability measure of k with error larger than xi
-
+- maxN: maximum number of homodyne data
+- stepN: number of homodyne data addition each step (while the sum of stdev is
+            larger than the bound)
 
 @author: andrewtanggara
 """

@@ -254,7 +254,9 @@ def pf_avg_prod_sum_bound_error(m ,k, beta, vs, cir, stepN=200, maxN=50000, prin
     N = 0
     incr = stepN #increment of Homodyne data per loop
     print("\n*** For beta = "+str(beta)+", start generating Homodyne samples...\n")
-    while (stdev_sum > beta) and (N<maxN): #keep create Homodyne samples if stdev sum exceeds bound
+    while (stdev_sum > beta): #keep creating Homodyne samples while stdev sum exceeds bound
+        if (N >= maxN) and (maxN>0):
+            break
         if (N%(incr*printmul) == 0):
             print("\n** "+str(stdev_sum)+" > beta = "+str(beta)+"\n"+
                   "Creating "+str(incr)+" more Homodyne samples ...")
@@ -315,7 +317,7 @@ def pf_avg_prod_sum_bound_error(m ,k, beta, vs, cir, stepN=200, maxN=50000, prin
                                    (N+j+1)*pfavgs[N+j]**2 + (N+j)*pfavgs[N+j-1]**2)
                     errs.append( np.sqrt( errsums[N+j]/((N+j+1)**2-(N+j+1)) ) )
             ## end loop over Homodyne samples
-        ## end loop over no-collision
+        ## end loop over no-collision states
         N = N + incr
         stdevs = np.array(errss)
         pav = np.array(pfavgss)
@@ -325,7 +327,7 @@ def pf_avg_prod_sum_bound_error(m ,k, beta, vs, cir, stepN=200, maxN=50000, prin
             print("last PF avgs "+str(pav[:,-1]))
         stdev_sum = np.sum(np.dot(stdevs[:,-1], vs))
     ## end while loop
-    print("\n**** Successfully achieved stdev sum "+str(stdev_sum)+" <= beta = "+str(beta))
+    print("\n**** Achieved stdev sum "+str(stdev_sum)+" <= beta = "+str(beta))
     print("last stdevs "+str(stdevs[:,-1]))
     pav = np.array(pfavgss)
     print("last PF avgs "+str(pav[:,-1]))
