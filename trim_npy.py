@@ -23,7 +23,7 @@ sim_details = sys.argv[3]
 timestamp = sys.argv[4]
 n = int(sys.argv[5])
 
-reldir = "res_PForacle/"
+reldir = "gen_res/"
 resn = ["pfavgss", "errss"]
 lress = []
 
