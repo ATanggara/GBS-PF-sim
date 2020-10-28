@@ -312,10 +312,15 @@ def pf_avg_prod_sum_bound_error(m ,k, beta, vs, cir, stepN=200, maxN=50000, prin
                 if (N+j)==0:
                     errsums.append((pfprods[0] - pfavgs[0])**2)
                     errs.append( np.sqrt(errsums[-1]) )
+                elif (N+j)==1:
+                    errsums.append(errsums[-1] + pfprods[-1]**2 - 
+                                   (N+j+1)*pfavgs[N+j]**2 + (N+j)*pfavgs[N+j-1]**2)
+                    errs.append( np.sqrt( errsums[N+j]/((N+j)*(N+j)) ) )
                 else:
                     errsums.append(errsums[-1] + pfprods[-1]**2 - 
                                    (N+j+1)*pfavgs[N+j]**2 + (N+j)*pfavgs[N+j-1]**2)
-                    errs.append( np.sqrt( errsums[N+j]/((N+j+1)**2-(N+j+1)) ) )
+#                    errs.append( np.sqrt( errsums[N+j]/((N+j+1)**2-(N+j+1)) ) )
+                    errs.append( np.sqrt( errsums[N+j]/((N+j)*(N+j-1)) ) )
             ## end loop over Homodyne samples
         ## end loop over no-collision states
         N = N + incr

@@ -7,7 +7,10 @@ to run this:
     $ python trim_npy.py sim_details n
 
 where
-    - sim_details: file name after the data description without ".npy"
+    - m
+    - k
+    - sim_details: file name after the data description without timestamp and ".npy"
+    - timestamp
     - n: only take every n-th element in array
 
 @author: andrewtanggara

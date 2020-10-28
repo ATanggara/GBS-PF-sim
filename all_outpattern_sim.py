@@ -5,7 +5,7 @@ This will run simscript-gen-v1.py once for a specific setting
 according to number of modes m and number of input squeezed state k.
 
 to run this:
-    $ python all_outpattern_sim.py m k r sv xi gam
+    $ python all_outpattern_sim.py m k r sv xi gam maxN stepN
 
 - m:  number of modes
 - k: number of input squeezed st (k<m must be true)
