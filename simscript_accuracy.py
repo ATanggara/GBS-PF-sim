@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Simulate for all possible output patterns
-
-This will run simscript_accuracy.py once for a specific setting 
+Simulate for all possible output patterns according to the specific setting 
 according to parameters described below.
 
 to run this:

@@ -63,10 +63,10 @@ def beamsplitter(st, t, fm):
     st is covariance matrix
     """
     D = np.array([
-        [np.sqrt(t), 0, np.sqrt(1-t), 0],
-        [0, np.sqrt(t), 0, np.sqrt(1-t)],
-        [-np.sqrt(1-t), 0, np.sqrt(t), 0],
-        [0, -np.sqrt(1-t), 0, np.sqrt(t)]
+        [np.sqrt(t), 0, -np.sqrt(1-t), 0],
+        [0, np.sqrt(t), 0, -np.sqrt(1-t)],
+        [np.sqrt(1-t), 0, np.sqrt(t), 0],
+        [0, np.sqrt(1-t), 0, np.sqrt(t)]
     ])
     if (st.shape[0] > 4):
         D = dirsum(dirsum(np.eye(2*(fm-1)), D), 

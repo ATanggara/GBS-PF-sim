@@ -21,7 +21,7 @@ def inter_haf(st, D):
     st is covariance matrix
     """
     Dl = dirsum(D,D)
-    Dr = dirsum(D.T,D.T)
+    Dr = dirsum(D.H,D.H)
     return (1/2)*Dl@st@Dr
 
 def BS_bos(m, t, fm):
@@ -48,6 +48,23 @@ def submtr(B,n):
         [B[2,1],B[2,2]]
     """
     nidx = np.argwhere(n).flatten()
+    return B[np.ix_(nidx, nidx)]
+
+def submtr_v2(B,n):
+    """
+    Submatrix of B based on n
+        e.g: for n = (0,1,1,0), we have submatrix:
+        [[B[1,1],B[1,2]], 
+        [B[2,1],B[2,2]]
+    """
+    print("ns "+str(n))
+    n = np.array(n)
+    nidx = np.where(n==1)[0]
+    nidx_mtr = []    
+    for i in range(nidx.shape[0]):
+        for k in range(nidx.shape[0]):
+            nidx_mtr.append([nidx[i],nidx[k]])
+    print("nidx "+str(nidx_mtr))
     return B[np.ix_(nidx, nidx)]
 
 def prob_haf(rs, ns, bs_arr, t, n_bar, t_noi):
@@ -128,9 +145,9 @@ def spBS_bos(m, t, m1, m2):
         e.g: if fm=2, then beamsplitter 
         operates on mode 2 and 3
     """
-    d = np.sqrt(t) #diagonal elements
-    odu = -np.sqrt(1-t) #element above the diagonal
-    odl = np.sqrt(1-t) #element below the diagonal
+    d = np.sqrt(t)
+    odu = -np.sqrt(1-t)
+    odl = np.sqrt(1-t)
     
     D = np.eye(m)
     D[m1-1,m1-1] = d
@@ -224,6 +241,59 @@ def prob_haf_gen(rs, ns, bs_arr, t, n_bar, t_noi):
     for i in range(ns.shape[0]):
         ns_fac = ns_fac * np.math.factorial(ns[i])
     norm_const = 1/(ns_fac*np.sqrt(det_s_Q))
+    
+    Pn = norm_const*haf
+    
+    return Pn
+
+
+def prob_haf_gen_interf(rs, ns, T, n_bar, t_noi):
+    """
+    compute output pattern probability using hafnian for general (pure and mixed) 
+    gaussian input state to a specified interferometer.
+    - rs: size (1,m) squeezing parameters
+    - ns: output pattern string in the form of "n1,n2,n3,n4,..."
+    - T: size (m,m) unitary matrix describing the interferometer
+    - n_bar: amount of thermal noise.
+        0 is vacuum noise, -1 no noise, otherwise thermal noise
+    - t_noi: transmissivity of beamsplitters between modes and noise modes
+    """
+    m = rs.shape[0]
+    
+    #define interferometer
+    D = T
+        
+    #calculate cov matrix
+    S = sq_haf(rs)
+    s = S@S.T
+    s = inter_haf(st=s,D=D)
+    for i in range(1,m+1): #add noise
+        s,_ = haf_therm_vac_noise(st=s, fm=i, n_bar=n_bar, t=t_noi)
+    
+    #convert outcome pattern to array
+    ls = ns.split(",")
+    for i in range(len(ls)):
+        ls[i] = int(ls[i]) 
+    ns = ls
+    
+    #### calculate matrix A and A_S
+    A = mtr_A(s=s)
+    A_S = submtr_comp(A, ns)
+    print("ns "+str(ns))
+    print(A_S)
+
+    s_Q = s + np.eye(s.shape[0])*(1/2)
+    det_s_Q = np.linalg.det(s_Q)
+    haf = hafnian.hafnian(A_S)
+    print("haf "+str(haf))
+    
+    ##calculate constant for P(n)
+    ns_fac = 1
+    for i in range(len(ns)):
+        ns_fac = ns_fac * np.math.factorial(ns[i])
+    norm_const = 1/(ns_fac*np.sqrt(det_s_Q))
+    norm_const = np.round(norm_const, 15)
+    print("const "+str(norm_const))
     
     Pn = norm_const*np.abs(haf)
     

@@ -2,9 +2,8 @@
 Pattern Function
 
 This version 1 includes the simulation that computes possible collision-free
-outputs until an error bound is satisfied. the resulting distribution is an 
-approximate GBS. This functionality is implemented in the function
-pf_avg_prod_sum_bound_error.
+outputs until an error bound is satisfied. This will then produces an approximate
+GBS.
 
 @author: andrewtanggara
 """
@@ -20,6 +19,7 @@ import math
 from GBSPF.opers import *
 from GBSPF.opers_haf import prob_haf_gen
 from GBSPF.PF import *
+from GBSPF import randMtr
 
 PI = np.pi
 
@@ -345,4 +345,162 @@ def pf_avg_prod_sum_bound_error(m ,k, beta, vs, cir, stepN=200, maxN=50000, prin
             np.array(pfsumss), np.array(pfavgss), 
             np.array(errss), np.array(errsumss))
 
+
+def generate_hom_samples_interf(N, rs, T, n_bar, t_noi):
+    """
+    N: number of hom data
+    rs: squeezing of input
+    T: unitary matrix that describes interferometer. Must match the dimension
+        of rs
+    n_bar: noise amount
+    t_noi: transmissivity of noise BS
+    
+    outputs N many m-mode homodyne samples, an array of size (N,m) from 
+    description of interferometer T.
+    """
+    m = rs.shape[0]
+    #compute first and second moments
+    mu = np.zeros(m*2)
+    s = msqueezer(rs).T@msqueezer(rs)
+    T = randMtr.unitaryToSymplectic(T) #convert unitary interferometer to symplectic
+    P = randMtr.transf_mtr(m)
+    T = P@T@P.T
+    s = T @ s @ T.T
+    
+    #put noise into cov matrix
+    for i in range(1,m+1):
+        s,_ = therm_vac_noise(st=s, fm=i, n_bar=n_bar, t=t_noi)
+    
+    #create data
+    print("\n========================\nCreating "+str(N)+" homodyne data...\n")
+    qp = []
+    for i in range(N):
+        #rand phase shift
+        ts = np.ones(m)*np.random.rand(1)
+        pi = np.ones(m)*np.pi
+        s_rand = mphasor(np.multiply(2*pi,ts)).T@s@mphasor(np.multiply(2*pi,ts))
+        qp.append(np.random.multivariate_normal(mu, s_rand*0.5))
+    qp = np.array(qp)
+    return qp
+
+
+def pf_avg_prod_sum_rand_interferometer(m ,k, ns, Ts, rs, n_bars, t_nois, maxN=50000, printn=5000):
+    """
+    Calculate PF GBS probability of output ns from random interferometers Ts 
+    and input squeezing rs. May have noise n_bars and t_nois for each 
+    interferometer.
+    
+    - m: number of modes
+    - k: number of input squeezed state
+    - ns: output photon pattern
+    - Ts: array of random interferometers
+    - rs: input squeezing parameters
+    - n_bars: array of noise amount for each interferometer
+    - t_nois: array of transmissivity of noise BS for each interferometer
+    - maxN: maximum Homodyne data
+    - nprintmul: result printed every nprintmul homodyne data
+    
+    returned values:
+    - pfsss: size=(nTs,N,m), pattern function for each mode of each hom data
+    - pfprodss: size=(nTs,N,1), product of PFs for each mode for each hom data,
+            j-th element is PF for the j-th data
+    - pfsumss: size=(nTs,N,1), j-th element sum until j-th data
+    - pfavgss: size=(nTs,N,1), j-th element is average of PFs until j-th data
+    - errss: size=(nTs,N,1), j-th element is stdev until j-th data
+    - errsumss: size(nTs,N,1), j-th element is sum for errs calculation
+    
+    for nTs size array Ts, and
+    N total number of Homodyne data
+    """
+    
+    ## these will store results form each random interferometer
+    pfsss = [] 
+    pfprodss = [] 
+    pfsumss = [] 
+    pfavgss = []
+    errss = []
+    errsumss = []
+
+    # convert output pattern to a list
+    ns = ns.split(",")    
+    ls = []
+    for j in range(len(ns)):
+        ls.append(int(ns[j]))
+    ns = ls
+    
+    nTs = len(Ts) #number of random interferometers
+    
+
+    for l in range(nTs): #loop over random interferometers
+        print("*** Generating Homodyne data for interferometer "+str(l)+"...")
+        qp = generate_hom_samples_interf(maxN, rs, Ts[l], n_bars[l], t_nois[l]) #generate homodyne data
+        pfss = []
+        pfprods = []
+        pfsums = []
+        pfavgs = []
+        errs = []
+        errsums = []
+        try:
+            pfss = pfsss[l]
+            pfprods = pfprodss[l] 
+            pfsums = pfsumss[l] 
+            pfavgs = pfavgss[l]
+            errs = errss[l]
+            errsums = errsumss[l]
+        except IndexError:
+            pfsss.append([])
+            pfprodss.append([]) 
+            pfsumss.append([])
+            pfavgss.append([])
+            errss.append([])
+            errsumss.append([])
+            pfss = pfsss[l]
+            pfprods = pfprodss[l] 
+            pfsums = pfsumss[l] 
+            pfavgs = pfavgss[l]
+            errs = errss[l]
+            errsums = errsumss[l]
+        
+        for j in range(qp.shape[0]): #loop over homodyne data
+            if j%printn == 0:
+                print("** processing "+str(j)+"th homodyne data.")
+            ## calculate pattern function
+            pfprod = 1
+            pfs = [] # size=m, pattern function for each mode of j-th hom data
+            for k in range(m): #loop over modes
+                pf = pfwav(qp[j,2*k], ns[k])
+                pfs.append(pf)
+                pfprod = pfprod * pfs[-1]
+            pfss.append(pfs)
+            pfprods.append(pfprod)
+            ## calculate sum
+            if len(pfsums) == 0:
+                pfsums.append(pfprods[j])
+            else:
+                pfsums.append(pfsums[-1] + pfprods[j])
+            ## calculate average
+            pfavgs.append(pfsums[j]/(j+1))
+            ## calculate error
+            if j==0:
+                errsums.append((pfprods[0] - pfavgs[0])**2)
+                errs.append( np.sqrt(errsums[-1]) )
+            elif j==1:
+                errsums.append(errsums[-1] + pfprods[-1]**2 - 
+                               (j+1)*(pfavgs[-1]**2) + j*(pfavgs[-2]**2))
+                errs.append( np.sqrt( errsums[-1] ) )
+            else:
+                errsums.append(errsums[-1] + pfprods[-1]**2 - 
+                               (j+1)*(pfavgs[-1]**2) + j*(pfavgs[-2]**2))
+                errs.append( np.sqrt( errsums[-1]/(j*(j-1)) ) )
+        ## end loop over Homodyne samples
+    
+    ## end loop over interferometers
+    
+    per = np.array(errss)
+    print("last stdevs "+str(per[:,-1]))
+    pav = np.array(pfavgss)
+    print("last PF avgs "+str(pav[:,-1]))
+    return (np.array(pfsss), np.array(pfprodss), 
+            np.array(pfsumss), np.array(pfavgss), 
+            np.array(errss), np.array(errsumss))
 
