@@ -38,8 +38,8 @@ sa = int(sys.argv[9])
 #gam = float(sys.argv[10])
 #stepN = int(sys.argv[12])
 
-n_bars = np.ones(m)*n_bar
-t_nois = np.ones(m)*t_noi
+n_bars = np.ones(nInterfs)*n_bar
+t_nois = np.ones(nInterfs)*t_noi
 
 #import random
 #random.seed(0)

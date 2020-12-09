@@ -430,7 +430,9 @@ def pf_avg_prod_sum_rand_interferometer(m ,k, ns, Ts, rs, n_bars, t_nois, maxN=5
     
     nTs = len(Ts) #number of random interferometers
     
-
+    print(nTs)
+    print(n_bars.shape[0])
+    print(t_nois.shape[0])
     for l in range(nTs): #loop over random interferometers
         print("*** Generating Homodyne data for interferometer "+str(l)+"...")
         qp = generate_hom_samples_interf(maxN, rs, Ts[l], n_bars[l], t_nois[l]) #generate homodyne data
