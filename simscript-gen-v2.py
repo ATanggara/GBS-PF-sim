@@ -5,7 +5,7 @@ To run: $ python simscript-gen-v2.py m k r ns ts maxN nInterfs nbar t_noi
     - r is squeezing param grater than or equal to 0
     - ns is output pattern separated by comma. e.g: "1,0,5,12,3"
     - maxN is number of Homodyne data
-    - nInterfs in number of random interferometers
+    - nInterfs is number of random interferometers
     - nbar is noise amount (equal to all modes), -1 being no noise, 0 being vacuum
     - t_noi is transmissivity of noise BS
     - sa is save mode {0,1,2}
@@ -41,8 +41,8 @@ sa = int(sys.argv[9])
 n_bars = np.ones(m)*n_bar
 t_nois = np.ones(m)*t_noi
 
-import random
-random.seed(0)
+#import random
+#random.seed(0)
 
 #squeezing params
 rs = []
