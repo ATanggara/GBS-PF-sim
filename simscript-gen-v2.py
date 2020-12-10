@@ -59,7 +59,7 @@ rs = np.array(rs)
 ### generate array of random unitary interferometers
 interfs = []
 for i in range(nInterfs):    
-    interfs.append(randomUnitary(m, re=False))
+    interfs.append(randomUnitary(m, re=True))
 
 #calculate prob
 print("Calculating probabilities using PF...")
