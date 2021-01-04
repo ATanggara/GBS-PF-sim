@@ -10,9 +10,11 @@ to run this:
 - m: number of modes
 - k: number of input squeezed st (k<m must be true)
 - r: input squeezing parameter
-- sv: save all if "1", if "0" only save pfavgs and errs
+- sa: save all if "1", if "0" only save pfavgs and errs
 - xi: value in (0,1) - lower-bound for PF-GBS approximation error
 - gam: value in (0,1) - upper-bound for probability measure of k with error larger than xi
+- maxN: maximum number of homodyne data (0 for no limit)
+- stepN: number of homodyne data generated before each error bound check
 
 @author: andrewtanggara
 """
@@ -23,7 +25,7 @@ from GBSPF.util import *
 m = int(sys.argv[1])
 k = int(sys.argv[2])
 r = float(sys.argv[3])
-sv = sys.argv[4]
+sa = sys.argv[4]
 xi = float(sys.argv[5])
 gam = float(sys.argv[6])
 maxN = int(sys.argv[7])
@@ -72,6 +74,41 @@ for ns in nss_mk:
 Pn_hafs = np.array(Pn_hafs)
 print("** Probability from hafnian: "+str(Pn_hafs))
 
+
+#### save result
+date = str(datetime.date.today())
+hr = str(datetime.datetime.now().hour)
+mint = str(datetime.datetime.now().minute)
+time = date+"-"+hr+""+mint #timestamp file
+
+reldir = "gen_res/" #relative save directory
+
+inputs = "("+str(m)+","+str(k)+")" #number of total modes and SMSS
+    
+ress = [pfsss, pfprodss, pfsumss, pfavgss, errss, errsumss]
+resn = ["pfsss", "pfprodss", "pfsumss", "pfavgss", "errss", "errsumss"]
+
+
+if sa=="1": #save all data
+    for i in range(len(ress)):
+        np.save(reldir+resn[i]+inputs+"_"+str(k)+"_"+str(r)+"_"+str(ns)+
+            "_"+str(maxN)+"_"+str(n_bar)+" - "+str(time), ress[i])
+elif sa=="0": #only save pfavgs and errs
+    sv = [3,4]
+    for i in sv:
+        np.save(reldir+resn[i]+inputs+"_"+str(k)+"_"+str(r)+"_"+str(ns)+
+            "_"+str(maxN)+"_"+str(n_bar)+" - "+str(time), ress[i])
+    np.save(reldir+"interfs"+inputs+"_"+str(k)+"_"+str(r)+"_"+str(ns)+
+            "_"+str(maxN)+"_"+str(n_bar)+" - "+str(time), interfs)
+    np.save(reldir+"hafs"+inputs+"_"+str(k)+"_"+str(r)+"_"+str(ns)+
+            "_"+str(maxN)+"_"+str(n_bar)+" - "+str(time), Pn_hafs)
+else: 
+    sv = [3,4]
+    for i in sv:
+        np.save(reldir+resn[i]+inputs+"_"+str(k)+"_"+str(r)+"_"+str(ns)+
+            "_"+str(maxN)+"_"+str(n_bar)+" - "+str(time), ress[i])
+    np.save(reldir+"hafs"+inputs+"_"+str(k)+"_"+str(r)+"_"+str(ns)+
+            "_"+str(maxN)+"_"+str(n_bar)+" - "+str(time), Pn_hafs)
 
 
 

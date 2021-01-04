@@ -7,7 +7,7 @@ To run: $ python simscript-gen.py n_data out r b t s n
     - t is specified save timestamp. "0" to not specify
     - s is save all if "1", if "0" only save pfavgs and errs
     - n is noise amount (equal to all modes), -1 being no noise, 0 being vacuum
-    - t_noi is transmissivity of noise BS
+    - t_noi is transmissivity of noise BS 1 for no noise
 """
 
 import numpy as np

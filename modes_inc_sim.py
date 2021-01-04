@@ -27,7 +27,7 @@ ndata = sys.argv[1]
 ns = sys.argv[3]
 time = timestamp() #fix a timestamp for all simulations
 n_bar = -1
-t_noi = 0.5
+t_noi = 1
 
 for i in range(2,max_modes+1,2):
     print("\n---------- "+str(i)+" modes ----------")

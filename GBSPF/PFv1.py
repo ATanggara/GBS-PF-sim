@@ -228,7 +228,7 @@ def pf_avg_prod_sum_bound_error(m ,k, beta, vs, cir, stepN=200, maxN=50000, prin
     - cir: 5-tuple describing the Homodyne GBS circuit 
             (input to generate_hom_samples)
     - stepN: increment of Homodyne data to reach the stdev sum bound
-    - maxN: maximum Homodyne data
+    - maxN: maximum Homodyne data, 0 for no limit
     - printmul: result printed every printmul*stepN Homodyne samples
     
     returned values:
